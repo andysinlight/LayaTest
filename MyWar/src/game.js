@@ -9,19 +9,24 @@ Laya.init(480, 852);
 Laya.ResourceVersion.enable("version.json", Handler.create(null, beginLoad), Laya.ResourceVersion.FILENAME_VERSION);
 
 var baseURL = "http://localhost";
-var wsURL = "ws://192.168.1.155:9081";
+var wsURL = "ws://localhost:9081";
+// var sw = new SocketIo(wsURL);
 
+Laya.beimi={
+	user:{}
+};
 var httpIo = new HttpIo(baseURL);
 var xhr = httpIo.httpGet("/api/guest", function (data, object) {
-	console.log("game connect success!!");
-	console.log(data);
+	console.log("game connect suLayaess!!");
+	// console.log(data);
+	Laya.beimi.user.id=JSON.parse(data).token.userid;
+	connectService();
 }, function () {
 	console.log("game connect fail !!");
 });
 
 
 
-new SocketIo(wsURL);
 
 function beginLoad() {
 	Laya.loader.load("res/atlas/war.atlas", Handler.create(null, onLoaded));
@@ -45,5 +50,48 @@ var onMouseMove = function () {
 	this.hero.pos(Laya.stage.mouseX, Laya.stage.mouseY);
 }
 
+
+
+function connectService(){
+
+       var _socket =new SocketIo(wsURL).connect(wsURL + '/bm/game',{"reconnection":true});
+
+
+
+ var param = {
+            token:Laya.beimi.authorization,
+            orgi:Laya.beimi.user.orgi,
+            userid:Laya.beimi.user.id
+        } ;
+        _socket.exec("gamestatus" , param);
+        // _socket.on("gamestatus" , function(result){
+        //     if(result!=null) {
+        //         var data = self.parse(result) ;
+        //         if(Laya.beimi.extparams !=null){
+        //             if(data.gamestatus == "playing" && data.gametype != null){
+        //                 /**
+        //                  * 修正重新进入房间后 玩法被覆盖的问题，从服务端发送过来的 玩法数据是 当前玩家所在房间的玩法，是准确的
+        //                  */
+        //                 if(Laya.beimi.extparams!=null){
+        //                     Laya.beimi.extparams.playway = data.playway ;
+        //                     Laya.beimi.extparams.gametype = data.gametype ;
+        //                     if(data.cardroom!=null && data.cardroom == true){
+        //                         Laya.beimi.extparams.gamemodel = "room";
+        //                     }
+        //                 }
+        //                 self.scene(data.gametype , self) ;
+        //             }else if(data.gamestatus == "timeout"){ //会话过期，退出登录 ， 会话时间由后台容器提供控制
+        //                 Laya.beimi.sessiontimeout = true ;
+        //                 self.alert("登录已过期，请重新登录") ;
+        //             }else{
+        //                 self.scene(Laya.beimi.extparams.gametype , self) ;
+        //             }
+        //         }
+        //         Laya.beimi.gamestatus = data.gamestatus;
+        //     }
+        // });
+
+
+}
 
 
