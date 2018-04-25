@@ -2,6 +2,29 @@ var CLASS$=Laya.class;
 var STATICATTR$=Laya.static;
 var View=laya.ui.View;
 var Dialog=laya.ui.Dialog;
+var loginUI=(function(_super){
+		function loginUI(){
+			
+		    this.user_name=null;
+		    this.pwd=null;
+		    this.btn_login=null;
+		    this.register=null;
+
+			loginUI.__super.call(this);
+		}
+
+		CLASS$(loginUI,'ui.test.loginUI',_super);
+		var __proto__=loginUI.prototype;
+		__proto__.createChildren=function(){
+		    
+			laya.ui.Component.prototype.createChildren.call(this);
+			this.createView(loginUI.uiView);
+
+		}
+
+		loginUI.uiView={"type":"View","props":{},"child":[{"type":"TextInput","props":{"y":233,"x":100,"width":200,"var":"user_name","type":"text","promptColor":"#ff0033","prompt":"用户名：","height":30,"fontSize":20,"color":"#000000","bgColor":"#17d1d9","align":"center"}},{"type":"TextInput","props":{"y":312,"x":102,"width":194,"var":"pwd","type":"text","promptColor":"#f31300","prompt":"密码：","height":37,"fontSize":20,"bgColor":"#2abad6","align":"center"}},{"type":"Button","props":{"y":400,"x":105,"width":200,"var":"btn_login","stateNum":3,"labelStrokeColor":"#21bb13","label":"登录","height":30,"click":"longin"}},{"type":"Button","props":{"y":467,"x":105,"width":200,"var":"register","label":"注册","height":30}}]};
+		return loginUI;
+	})(View);
 var TestPageUI=(function(_super){
 		function TestPageUI(){
 			

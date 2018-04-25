@@ -13,7 +13,7 @@ var HttpIo = (function (_super) {
         xhr.once(Event.PROGRESS, this, function (e) {
             console.log(e)
         });
-        xhr.once(Event.COMPLETE, this, function(){
+        xhr.once(Event.COMPLETE, this, function () {
             suLayaess(xhr.data, object)
         });
         xhr.once(Event.ERROR, this, error);
@@ -29,8 +29,22 @@ var HttpIo = (function (_super) {
         xhr.send(baseURL + url, tmp + token, 'get', 'text');
     }
 
+    _proto.httpPost = function (url, params, success , error , object) {
+        var xhr = new HttpRequest();
 
-    function encodeFormData(data) {
+        xhr.once(Event.PROGRESS, this, function (e) {
+            console.log(e)
+        });
+        xhr.once(Event.COMPLETE, this, function () {
+            success(xhr.data, object)
+        });
+        xhr.once(Event.ERROR, this, error);
+
+        xhr.send(baseURL + url, this.encodeFormData(params), 'post', 'text');
+    }
+
+
+    _proto.encodeFormData = function (data) {
         var pairs = [];
         var regexp = /%20/g;
         for (var name in data) {
@@ -41,7 +55,6 @@ var HttpIo = (function (_super) {
         }
         return pairs.join("&");
     }
-
 
     Laya.class(HttpIo, "HttpIo", _super);
     return HttpIo;
